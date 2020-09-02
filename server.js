@@ -12,14 +12,13 @@ const PORT = process.env.PORT || 4000;
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(morgan('dev'));
 
 // routes
 app.use('/api', apiRouter);
 
 // handling error
 app.use(errorhandler());
-
-app.use(morgan('dev'));
 
 app.listen(PORT, () => {
   console.log(`Server is ready at http://localhost:${PORT}`);

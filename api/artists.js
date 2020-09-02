@@ -6,7 +6,7 @@ const db = new sqlite3.Database(
   process.env.TEST_DATABASE || './database.sqlite'
 );
 
-artistsRouter.param('artistId', (req, res, next, artistsId) => {
+artistsRouter.param('artistId', (req, res, next, artistId) => {
   const sql = 'SELECT * FROM Artist WHERE Artist.id = $artistId';
   const values = { $artistId: artistId };
   db.get(sql, values, (error, artist) => {
@@ -28,14 +28,24 @@ artistsRouter.get('/', (req, res, next) => {
       if (err) {
         next(err);
       } else {
-        res.status(200).json({ artists: artists });
+        res.status(200).json({ artists });
       }
     }
   );
 });
 
-artistsRouter.get('./artistId', (req, res, next) => {
+artistsRouter.get('/:artistId', (req, res, next) => {
   res.status(200).json({ artist: req.artist });
+});
+
+artistsRouter.post('/', (req, res, next) => {
+  const name = req.body.artist.name;
+  const dateOfBirth = req.body.artist.dateOfBirth;
+  const biography = req.body.artist.biography;
+
+  if (!name || !dateOfBirth || !biography) {
+    return res.sendStatus(400);
+  }
 });
 
 module.exports = artistsRouter;
