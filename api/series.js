@@ -8,7 +8,7 @@ const db = new sqlite3.Database(
 
 seriesRouter.param('seriesId', (req, res, next, seriesId) => {
   const sql = 'SELECT * FROM Series WHERE Series.id = $seriesId';
-  const values = { $serieId: serieId };
+  const values = { $seriesId: seriesId };
   db.get(sql, values, (error, series) => {
     if (error) {
       next(error);
@@ -22,16 +22,16 @@ seriesRouter.param('seriesId', (req, res, next, seriesId) => {
 });
 
 seriesRouter.get('/', (req, res, next) => {
-  db.all('SELECT * FROM Series', (err, Series) => {
+  db.all('SELECT * FROM Series', (err, series) => {
     if (err) {
       next(err);
     } else {
-      res.status(200).json({ Series });
+      res.status(200).json({ series: series });
     }
   });
 });
 
-seriesRouter.get('/:serieId', (req, res, next) => {
+seriesRouter.get('/:seriesId', (req, res, next) => {
   res.status(200).json({ series: req.series });
 });
 
@@ -61,25 +61,25 @@ seriesRouter.post('/', (req, res, next) => {
   });
 });
 
-seriesRouter.put('/:serieId', (req, res, next) => {
+seriesRouter.put('/:seriesId', (req, res, next) => {
   const name = req.body.series.name;
   const description = req.body.series.description;
   if (!name || !description) {
     return res.sendStatus(400);
   }
   const sql =
-    'UPDATE Series SET name = $name, description = $description WHERE Series.id = $serieId';
+    'UPDATE Series SET name = $name, description = $description WHERE Series.id = $seriesId';
   const values = {
     $name: name,
     $description: description,
-    $serieId: req.params.serieId,
+    $seriesId: req.params.seriesId,
   };
   db.run(sql, values, (error) => {
     if (error) {
       next(error);
     } else {
       db.get(
-        `SELECT * FROM Series WHERE Series.id = ${req.params.serieId}`,
+        `SELECT * FROM Series WHERE Series.id = ${req.params.seriesId}`,
         (error, series) => {
           res.status(200).json({ series: series });
         }
