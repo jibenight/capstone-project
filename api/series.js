@@ -1,6 +1,6 @@
 const express = require('express');
 const seriesRouter = express.Router();
-import issuesRouter = require('issues.js');
+const issuesRouter = require('./issues.js');
 
 const sqlite3 = require('sqlite3');
 const db = new sqlite3.Database(
@@ -21,6 +21,8 @@ seriesRouter.param('seriesId', (req, res, next, seriesId) => {
     }
   });
 });
+
+seriesRouter.use('/:seriesId/issues', issuesRouter);
 
 seriesRouter.get('/', (req, res, next) => {
   db.all('SELECT * FROM Series', (err, series) => {
