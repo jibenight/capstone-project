@@ -33,7 +33,7 @@ issuesRouter.post('/', (req, res, next) => {
         return res.sendStatus(400);
       }
       const sql =
-        'INSERT INTO Issue (name, issueNumber,publicationDate, artistId, seriesId) VALUES ($name, $issueNumber,$publicationDate,$artistId,$seriesId)';
+        'INSERT INTO Issue (name, issueNumber,publicationDate, artist_id, series_id) VALUES ($name, $issueNumber,$publicationDate,$artistId,$seriesId)';
       const values = {
         $name: name,
         $issueNumber: issueNumber,
